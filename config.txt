@@ -1,0 +1,21 @@
+path - the path that the files will be stored
+
+Configuration of the directories:
+1) make directories /audio , /labels under the  path and store .wav and .csv files respectively
+2) Make sure datasets follow the following directory names:
+{BirdVox-DCASE-20k/ ff1010bird/ warblrb10k/}
+and the labels {BirdVox-DCASE-20k.csv ff1010bird.csv warblrb10k.csv}
+
+Features available:
+OpenSmile Toolkit:
+MFCC : opensmile_mfcc
+Chroma : opensmile_chroma
+
+Librosa Python:
+MFCC: mfcc
+Constant-Q Chromagram: cqt
+Constan-Q Chromagram (Energy normilized, CENS): cens
+
+Classifiers available:
+SVM : svm
+Random Forest: forest
