@@ -10,6 +10,7 @@ import sklearn
 import _pickle
 from sklearn.preprocessing import QuantileTransformer
 import sys
+from scipy.signal import butter
 
 #fix seed for reproducibility
 np.random.seed(7)
@@ -25,7 +26,7 @@ max_frames = 431
 def butter_highpass(cutoff, fs, order=2):
             nyq = 0.5 * fs
             normal_cutoff = cutoff / nyq
-            b, a = scipy.signal.butter(order, normal_cutoff, btype='highpass', analog=False)
+            b, a = butter(order, normal_cutoff, btype='highpass', analog=False)
             return b, a
 
 
@@ -44,7 +45,7 @@ def mfcc(item,directory):
 
         #apply a butterworth highpass filter to improve SNR for bands relevant to bird sounds
         if item.hasbird == 1:
-            b, a = butter_highpass(2000, 22050)
+            b, a = butter_highpass(2000, sampling_rate)
             signal = scipy.signal.filtfilt(b, a, signal)
 
         """f = plt.figure(1)
@@ -98,7 +99,7 @@ def mfcc(item,directory):
         features = qt.fit_transform(features)
 
         
-        #pad rows with the mean values in order to fit the (431,39) size
+        #pad rows with the mean values to fit the (431,39) size
         if features.shape[0] != max_frames :
             means = np.mean(features, axis=0)
             means = means.reshape(1,-1) 
@@ -169,7 +170,7 @@ def chroma_cens_lib(item,directory, extention = '.wav'):
         print("Error while processing the file", e)
     
     if bird == 1:
-        b, a = butter_highpass(2000, 22050)
+        b, a = butter_highpass(2000, sampling_rate)
         signal = scipy.signal.filtfilt(b, a, signal)
         
     signal = librosa.resample(signal, sampling_rate, 22050)
@@ -211,7 +212,7 @@ def chroma_cqt_lib(item,directory, extention = '.wav'):
         print("Error while processing the file", e)
     
     if bird == 1:
-        b, a = butter_highpass(2000, 22050)
+        b, a = butter_highpass(2000, sampling_rate)
         signal = scipy.signal.filtfilt(b, a, signal)
         
     signal = librosa.resample(signal, sampling_rate, 22050)
@@ -219,7 +220,7 @@ def chroma_cqt_lib(item,directory, extention = '.wav'):
 
     duration = librosa.get_duration(y=signal)
     
-    #adjust hop length in order to have a fixed size vestor
+    #adjust hop length to have a fixed size vestor
     if duration != 10:
         if duration > 10:
             chromagram = librosa.feature.chroma_cqt(y=signal, sr=sampling_rate,hop_length=1024)
