@@ -19,6 +19,6 @@ Classifiers:
 - Random Forest
 - SVM.
 
-Chroma CQT and Chroma CENS features respond perfectly with the SVM classifier resulting in 99.43% and 99.83% AUC respectively.
+Chroma CQT and Chroma CENS features respond perfectly with the SVM classifier resulting in 96.99% and 98.56% AUC respectively.
 
 Configurations and details on the code are presented in the config.txt file.
